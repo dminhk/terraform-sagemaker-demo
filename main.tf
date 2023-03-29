@@ -33,9 +33,9 @@ resource "aws_sagemaker_notebook_instance" "notebook_instance" {
   role_arn = aws_iam_role.notebook_iam_role.arn
   #instance_type = "ml.t2.medium"
   instance_type = "ml.m5.12xlarge"
-  #volume_size = 50
+  volume_size = 10
   #lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.notebook_config.name
-  #default_code_repository = aws_sagemaker_code_repository.git_repo.code_repository_name
+  default_code_repository = aws_sagemaker_code_repository.git_repo.code_repository_name
 }
 
 # Defining the Git repo to instantiate on the SageMaker notebook instance
@@ -45,4 +45,17 @@ resource "aws_sagemaker_code_repository" "git_repo" {
   git_config {
     repository_url = "https://github.com/dminhk/terraform-sagemaker-demo.git"
   }
+}
+
+# Defining the SageMaker notebook lifecycle configuration
+resource "aws_sagemaker_notebook_instance_lifecycle_configuration" "notebook_config" {
+  name = "sagemaker-notebook-lifecycle-config"
+  on_create = filebase64("on-create.sh")
+  on_start = filebase64("on-start.sh")
+}
+
+# Output
+output "aws_sagemaker_notebook_instance_url" {
+  description = "AWS SageMaker Notebook Instance URL"
+  value = "http://${aws_sagemaker_notebook_instance.notebook_instance.url}/lab"
 }
