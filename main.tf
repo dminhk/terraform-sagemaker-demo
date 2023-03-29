@@ -34,7 +34,6 @@ resource "aws_sagemaker_notebook_instance" "notebook_instance" {
   #instance_type = "ml.t2.medium"
   instance_type = "ml.m5.12xlarge"
   volume_size = 10
-  #lifecycle_config_name = aws_sagemaker_notebook_instance_lifecycle_configuration.notebook_config.name
   default_code_repository = aws_sagemaker_code_repository.git_repo.code_repository_name
 }
 
@@ -45,13 +44,6 @@ resource "aws_sagemaker_code_repository" "git_repo" {
   git_config {
     repository_url = "https://github.com/dminhk/terraform-sagemaker-demo.git"
   }
-}
-
-# Defining the SageMaker notebook lifecycle configuration
-resource "aws_sagemaker_notebook_instance_lifecycle_configuration" "notebook_config" {
-  name = "sagemaker-notebook-lifecycle-config"
-  on_create = filebase64("on-create.sh")
-  on_start = filebase64("on-start.sh")
 }
 
 # Output
