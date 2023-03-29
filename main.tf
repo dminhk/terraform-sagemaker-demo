@@ -31,8 +31,8 @@ resource "aws_iam_policy_attachment" "sm_full_access_attach" {
 resource "aws_sagemaker_notebook_instance" "notebook_instance" {
   name = "terraform-autogluon-notebook"
   role_arn = aws_iam_role.notebook_iam_role.arn
-  #instance_type = "ml.t2.medium"
-  instance_type = "ml.m5.12xlarge"
+  instance_type = "ml.t3.medium"
+  #instance_type = "ml.m5.12xlarge"
   volume_size = 10
   default_code_repository = aws_sagemaker_code_repository.git_repo.code_repository_name
 }
